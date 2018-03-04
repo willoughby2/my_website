@@ -15,22 +15,26 @@ function mapSetup(){
     
 }
 
+
 function addData(mymap){
-    $.ajax("data/lightrailusa.geojson", {
+    //load the data
+    $.ajax("data/MegaCities.geojson", {
         dataType: "json",
         success: function(response){
-
+            //examine the data in the console to figure out how to construct the loop
             console.log(response)
 
+            //create an L.markerClusterGroup layer
             var markers = L.markerClusterGroup();
 
+            //loop through features to create markers and add to MarkerClusterGroup
             for (var i = 0; i < response.features.length; i++) {
                 var a = response.features[i];
                 //add properties html string to each marker
                 var properties = "";
                 for (var property in a.properties){
                     properties += "<p>" + property + ": " + a.properties[property] + "</p>";
-                };
+                }
                 var marker = L.marker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]), { properties: properties });
                 //add a popup for each marker
                 marker.bindPopup(properties);
@@ -43,5 +47,4 @@ function addData(mymap){
         }
     });
 }
-
 $(document).ready(mapSetup);
