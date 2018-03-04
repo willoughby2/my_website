@@ -1,2 +1,17 @@
 /* Stylesheet by Amy Willoughby, 2018 */
-#mapid { height: 500px; }
+#mapid {
+    height: 500px;
+    margin-left: 150px;
+    margin-right: 150px;
+
+}
+
+header {
+    color: dimgray;
+    font-size: 40px;
+}
+
+p1 {
+    color: grey;
+    font-size: 20px;
+}

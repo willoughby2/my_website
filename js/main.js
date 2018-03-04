@@ -16,36 +16,32 @@ function mapSetup(){
 }
 
 function addData(mymap){
-    $.ajax({
+    $.ajax("data/lightrailusa.geojson", {
         dataType: "json",
-        url: "data/lightrailusa.geojson",
-        success: function(response) {
-            L.geoJSON(response, {
-                onEachFeature: onEachFeature,
-                
-                pointToLayer: function (feature, latlng) {
-                    return L.marker(latlng, {icon: railIcon});
+        success: function(response){
+
+            console.log(response)
+
+            var markers = L.markerClusterGroup();
+
+            for (var i = 0; i < response.features.length; i++) {
+                var a = response.features[i];
+                //add properties html string to each marker
+                var properties = "";
+                for (var property in a.properties){
+                    properties += "<p>" + property + ": " + a.properties[property] + "</p>";
+                };
+                var marker = L.marker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]), { properties: properties });
+                //add a popup for each marker
+                marker.bindPopup(properties);
+                //add marker to MarkerClusterGroup
+                markers.addLayer(marker);
             }
-            }).addTo(mymap);
+
+            //add MarkerClusterGroup to map
+            mymap.addLayer(markers);
         }
-    })
+    });
 }
-
-function onEachFeature(feature, layer) {
-    //no property named popupContent; instead, create html string with all properties
-    var popupContent = "";
-    if (feature.properties) {
-        //loop to add feature property names and values to html string
-        for (var property in feature.properties){
-            popupContent += "<p>" + property + ": " + feature.properties[property] + "</p>";
-        }
-        layer.bindPopup(popupContent);
-    };
-};
-
-var railIcon = new L.Icon({
-    iconSize: [32, 32],
-    iconUrl: 'img/transport_rail1.png'
-});
 
 $(document).ready(mapSetup);
