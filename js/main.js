@@ -21,7 +21,7 @@ function mapSetup(){
 
 function calcPropRadius(attValue) {
     //scale factor to adjust symbol size evenly
-    var scaleFactor = 10;
+    var scaleFactor = .00001;
     //area based on attribute value and scale factor
     var area = attValue * scaleFactor;
     //radius calculated based on area
@@ -126,11 +126,13 @@ function pointToLayer(feature, latlng, attributes){
 
 function getData(map){
 
-    $.ajax("data/lightrailusa1.geojson", {
+    $.ajax("data/railusa.geojson", {
         dataType: "json",
         success: function(response){
             
             var attributes = processData(response);
+            
+            console.log(response);
  
             createPropSymbols(response, map, attributes);
             createSequenceControls(map, attributes);
