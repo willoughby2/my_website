@@ -1,9 +1,41 @@
 /* Stylesheet by Amy Willoughby, 2018 */
 #mapid {
     height: 500px;
-    margin-left: 150px;
-    margin-right: 150px;
+    width: 80%;
+    display: inline-block;
 
+}
+
+#text {
+    width: 16%;
+    padding: 15px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    line-height: 42px;
+}
+
+#panel {
+    width: 16%;
+    padding: 15px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    line-height: 42px;
+}
+
+.range-slider {
+    width: 45%;
+}
+
+#forward {
+    width: 25%;
+    float: right;
+}
+
+#reverse {
+    width: 25%;
+    float: left;
 }
 
 header {
@@ -14,4 +46,10 @@ header {
 p1 {
     color: grey;
     font-size: 20px;
+}
+
+p2 {
+    vertical-align: bottom;
+    color: grey;
+    font-size: 12px;
 }
