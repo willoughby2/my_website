@@ -1,27 +1,29 @@
 /* Stylesheet by Amy Willoughby, 2018 */
 #mapid {
-    height: 500px;
+    height: 450px;
     width: 80%;
     display: inline-block;
-
+    float: left;
 }
 
 #text {
     width: 16%;
+    height: 200px;
     padding: 15px;
     display: inline-block;
-    vertical-align: top;
-    text-align: center;
-    line-height: 42px;
+    float: right;
+    clear: right;
 }
 
 #panel {
-    width: 16%;
+    width: 15%;
+    height: 100px;
     padding: 15px;
     display: inline-block;
     vertical-align: top;
     text-align: center;
-    line-height: 42px;
+    line-height: 17px;
+    float: right;
 }
 
 .range-slider {
@@ -43,6 +45,11 @@ header {
     font-size: 40px;
 }
 
+p {
+    color:dimgray;
+    font-size: 18px;
+}
+
 p1 {
     color: grey;
     font-size: 20px;
@@ -52,4 +59,10 @@ p2 {
     vertical-align: bottom;
     color: grey;
     font-size: 12px;
+}
+
+p3 {
+    font-size: 20px;
+    color: gray;
+    letter-spacing: 6px;
 }

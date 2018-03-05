@@ -40,7 +40,30 @@ function createPropSymbols(data, map, attributes){
     }).addTo(map);
 }
 
-function createSequenceControls(map){
+function updatePropSymbols(map, attribute){
+    map.eachLayer(function(layer){
+        if (layer.feature && layer.feature.properties[attribute]){
+            
+            var props = layer. feature.properties;
+            
+            var radius = calcPropRadius(props[attribute]);
+            layer.setRadius(radius);
+            
+            var popupContent =  "<br><b>Rail Name: </b>" + props.name + "<br><b>City: </b>" + props.city + "<br><b>State: </b>" + props.state + "<br><b>Established in: </b>" + props.established;
+            
+            var year = attribute.split("_")[1];
+            
+            popupContent += "<p><b>Ridership in " + year + ":</b> " + props[attribute];
+            
+            layer.bindPopup(popupContent, {
+                offset: new L.Point(0,0)
+            });
+            
+        }
+    })
+}
+
+function createSequenceControls(map, attributes){
     
     $('#panel').append('<button class="skip" id="reverse">Reverse</button>');
     $('#panel').append('<button class="skip" id="forward">Skip</button>');
@@ -50,9 +73,9 @@ function createSequenceControls(map){
     $('#panel').append('<input class="range-slider" display="inline-block" type="range">');
     
     $('.range-slider').attr({
-        max: 5,
+        max: 4,
         min: 0,
-        value: 5,
+        value: 4,
         step: 1
     })
     
@@ -62,19 +85,23 @@ function createSequenceControls(map){
         
         if ($(this).attr('id') == 'forward'){
             index++;
-            index = index > 5 ? 0: index;
+            index = index > 4 ? 0: index;
         } else if ($(this).attr('id') == 'reverse') {
             index--;
-            index = index < 0 ? 5: index;
+            index = index < 0 ? 4: index;
         }
         
         $('.range-slider').val(index);
+        
+        updatePropSymbols(map, attributes[index]);
         
     });
     
     $('.range-slider').on('input', function(){
         
         var index= $(this).val();
+        
+        updatePropSymbols(map, attributes[index]);
         
     });
 
@@ -116,7 +143,7 @@ function pointToLayer(feature, latlng, attributes){
     
     var layer = L.circleMarker(latlng, options);
     
-    var popupContent = "<br><b>Rail Name: </b>" + feature.properties.name + "<br><b>City: </b>" + feature.properties.city + "<br><b>State: </b>" + feature.properties.state + "<br><b>Established in: </b>" + feature.properties.established + "<br><b>Rail System Length (miles): </b> " + feature.properties[attribute] + "</p>";
+    var popupContent = "<br><b>Rail Name: </b>" + feature.properties.name + "<br><b>City: </b>" + feature.properties.city + "<br><b>State: </b>" + feature.properties.state + "<br><b>Established in: </b>" + feature.properties.established + "<p><b>Ridership in 2016: </b> " + feature.properties[attribute] + "</p>";
     
     layer.bindPopup(popupContent);
     
@@ -131,8 +158,6 @@ function getData(map){
         success: function(response){
             
             var attributes = processData(response);
-            
-            console.log(response);
  
             createPropSymbols(response, map, attributes);
             createSequenceControls(map, attributes);
