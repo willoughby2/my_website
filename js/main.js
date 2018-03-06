@@ -71,7 +71,7 @@ function updateLegend(map, attribute){
         if (layer.feature && layer.feature.properties[attribute]){
                         
             var year = attribute.split("_")[1];
-            
+            console.log(year);
             var legendContent = "<p><b>Ridership in " + year;
             
             return legendContent;
@@ -177,8 +177,7 @@ function pointToLayer(feature, latlng, attributes){
      
 }
 
-
-//still trying to get this part to work correctly. The div shows up in the bottom left when I check the developer tools in Chrome, but I can't seem to get anything to show up on the map. 
+//creates the legend with Ridership year
 function createLegend(map, attributes){
     var LegendControl = L.Control.extend({
         options: {
