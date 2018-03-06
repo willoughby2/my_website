@@ -45,9 +45,21 @@ header {
     font-size: 40px;
 }
 
-p {
+.legend-control-container{
+    height: 100px;
+    width: 100px;
+    color:aquamarine;
+}
+
+.temporal-legend {
+    height: 100px;
+    width: 100px;
+    color:aquamarine;
+}
+
+p4 {
     color:dimgray;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 p1 {

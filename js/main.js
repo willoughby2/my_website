@@ -21,7 +21,7 @@ function mapSetup(){
 
 function calcPropRadius(attValue) {
     //scale factor to adjust symbol size evenly
-    var scaleFactor = .00001;
+    var scaleFactor = .000005;
     //area based on attribute value and scale factor
     var area = attValue * scaleFactor;
     //radius calculated based on area
@@ -53,7 +53,7 @@ function updatePropSymbols(map, attribute){
             
             var year = attribute.split("_")[1];
             
-            popupContent += "<p><b>Ridership in " + year + ":</b> " + props[attribute];
+            popupContent += "<p><b>Ridership in " + year + ":</b> " + props[attribute]/1000000 + " million</p>";
             
             layer.bindPopup(popupContent, {
                 offset: new L.Point(0,0)
@@ -62,6 +62,22 @@ function updatePropSymbols(map, attribute){
         }
     })
 }
+
+function updateLegend(map, attribute){
+    map.eachLayer(function(layer){
+        if (layer.feature && layer.feature.properties[attribute]){
+                        
+            var year = attribute.split("_")[1];
+            
+            legendContent += "<p><b>Ridership in " + year;
+            
+            return legendContent;
+            }
+            
+    })
+    
+}
+
 
 function createSequenceControls(map, attributes){
     
@@ -80,6 +96,8 @@ function createSequenceControls(map, attributes){
     })
     
     $('.skip').click(function(){
+        
+        map.closePopup();
         
         var index = $('.range-slider').val();
         
@@ -102,10 +120,9 @@ function createSequenceControls(map, attributes){
         var index= $(this).val();
         
         updatePropSymbols(map, attributes[index]);
+        updateLegend(map,attributes[index]);
         
-    });
-
-    
+    }); 
 
 }
 
@@ -126,7 +143,7 @@ function processData(data){
 
 function pointToLayer(feature, latlng, attributes){
     
-    var attribute = attributes[0];
+    var attribute = attributes[4];
     
     var options = {
         radius: 8,
@@ -143,7 +160,7 @@ function pointToLayer(feature, latlng, attributes){
     
     var layer = L.circleMarker(latlng, options);
     
-    var popupContent = "<br><b>Rail Name: </b>" + feature.properties.name + "<br><b>City: </b>" + feature.properties.city + "<br><b>State: </b>" + feature.properties.state + "<br><b>Established in: </b>" + feature.properties.established + "<p><b>Ridership in 2016: </b> " + feature.properties[attribute] + "</p>";
+    var popupContent = "<br><b>Rail Name: </b>" + feature.properties.name + "<br><b>City: </b>" + feature.properties.city + "<br><b>State: </b>" + feature.properties.state + "<br><b>Established in: </b>" + feature.properties.established + "<p><b>Ridership in 2016: </b> " + feature.properties[attribute]/1000000 + " million</p>";
     
     layer.bindPopup(popupContent);
     
@@ -161,8 +178,36 @@ function getData(map){
  
             createPropSymbols(response, map, attributes);
             createSequenceControls(map, attributes);
+            createLegend(map, attributes);
         }
     });
+}
+
+function createLegend(map, attributes){
+    var LegendControl = L.Control.extend({
+        options: {
+            position: 'bottomleft'
+        },
+        
+        onAdd: function (map) {
+            
+            console.log(attributes);
+            
+            var container = L.DomUtil.create('div', 'legend-control-container');
+            
+            $(container).append('<div id="temporal-legend">')
+            
+            var year = attribute.split("_")[1];
+            
+            legendContent += "<p><b>Ridership in " + year;
+            
+            $(container).append(legendContent);
+            
+            return container;
+        }
+    })
+    
+    map.addControl(new LegendControl());
 }
 
 $(document).ready(mapSetup);
