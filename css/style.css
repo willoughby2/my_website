@@ -46,15 +46,18 @@ header {
 }
 
 .legend-control-container{
-    height: 100px;
-    width: 100px;
-    color:aquamarine;
+    width: 150px;
+    height: 20px;
+    background-color: rgba(255,255,255,0.8);
+    padding: 10px;
+    text-align: center;
+    border: solid gray 1px;
 }
 
 .temporal-legend {
     height: 100px;
     width: 100px;
-    color:aquamarine;
+    background-color: azure;
 }
 
 p4 {

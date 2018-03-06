@@ -72,7 +72,7 @@ function updateLegend(map, attribute){
                         
             var year = attribute.split("_")[1];
             
-            legendContent += "<p><b>Ridership in " + year;
+            var legendContent = "<p><b>Ridership in " + year;
             
             return legendContent;
             }
@@ -132,7 +132,7 @@ function createSequenceControls(map, attributes){
 }
 
 function processData(data){
-    //sets up the addtributes variable
+    //sets up the attributes variable
     var attributes = [];
     
     var properties = data.features[0].properties;
@@ -142,7 +142,7 @@ function processData(data){
             attributes.push(attribute);
         }
     }
-    
+    console.log(attributes);
     return attributes;
 }
 
@@ -187,15 +187,11 @@ function createLegend(map, attributes){
         
         onAdd: function (map) {
             
-            console.log(attributes);
-            
             var container = L.DomUtil.create('div', 'legend-control-container');
             
             $(container).append('<div id="temporal-legend">')
-            
-            var year = attribute.split("_")[1];
-            
-            legendContent += "<p><b>Ridership in " + year;
+
+            var legendContent = "<p4><b>Ridership in 2016</p4>"
             
             $(container).append(legendContent);
             
