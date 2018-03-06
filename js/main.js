@@ -5,9 +5,10 @@ L.map = function (id, options) {
 };
 
 function mapSetup(){
-    
+    // set the view for the contiguous United States
     var map = L.map('mapid').setView([34.45, -96.77], 4);
 
+    //I chose mapbox.light map since its grayscale would all my icons to stand out. 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 18,
@@ -20,11 +21,11 @@ function mapSetup(){
 }
 
 function calcPropRadius(attValue) {
-    //scale factor to adjust symbol size evenly
+    //scale factor had to be extremely small since data was in the millions
     var scaleFactor = .000005;
-    //area based on attribute value and scale factor
+
     var area = attValue * scaleFactor;
-    //radius calculated based on area
+
     var radius = Math.sqrt(area/Math.PI);
 
     return radius;
@@ -32,7 +33,6 @@ function calcPropRadius(attValue) {
 
 function createPropSymbols(data, map, attributes){
 
-    //create a Leaflet GeoJSON layer and add it to the map
     L.geoJson(data, {
         pointToLayer: function(feature,latlng){
             return pointToLayer(feature, latlng, attributes);
@@ -49,10 +49,12 @@ function updatePropSymbols(map, attribute){
             var radius = calcPropRadius(props[attribute]);
             layer.setRadius(radius);
             
+            //Included all important data in popup
             var popupContent =  "<br><b>Rail Name: </b>" + props.name + "<br><b>City: </b>" + props.city + "<br><b>State: </b>" + props.state + "<br><b>Established in: </b>" + props.established;
             
             var year = attribute.split("_")[1];
             
+            //I truncated the ridership numbers to make them easier to read.
             popupContent += "<p><b>Ridership in " + year + ":</b> " + props[attribute]/1000000 + " million</p>";
             
             layer.bindPopup(popupContent, {
@@ -63,6 +65,7 @@ function updatePropSymbols(map, attribute){
     })
 }
 
+//One area I could not get to work. I am still trying
 function updateLegend(map, attribute){
     map.eachLayer(function(layer){
         if (layer.feature && layer.feature.properties[attribute]){
@@ -119,6 +122,8 @@ function createSequenceControls(map, attributes){
         
         var index= $(this).val();
         
+        
+        //I have this ready to update both the propsymbols and the legend once I can get the legend to work properly
         updatePropSymbols(map, attributes[index]);
         updateLegend(map,attributes[index]);
         
@@ -127,7 +132,7 @@ function createSequenceControls(map, attributes){
 }
 
 function processData(data){
-    
+    //sets up the addtributes variable
     var attributes = [];
     
     var properties = data.features[0].properties;
@@ -145,44 +150,35 @@ function pointToLayer(feature, latlng, attributes){
     
     var attribute = attributes[4];
     
+    //I chose a red color to make it pop against the grayscale map
     var options = {
         radius: 8,
         fillColor: "#cd2626",
         color: "#000",
         weight: 1,
         opacity: 1,
-        fillOpacity: 0.8,
+        fillOpacity: 0.7,
     };
     
     var attValue = Number(feature.properties[attribute]);
     
     options.radius = calcPropRadius(attValue);
     
+    //creates the circle markers using options above
     var layer = L.circleMarker(latlng, options);
     
+    //creates the popup
     var popupContent = "<br><b>Rail Name: </b>" + feature.properties.name + "<br><b>City: </b>" + feature.properties.city + "<br><b>State: </b>" + feature.properties.state + "<br><b>Established in: </b>" + feature.properties.established + "<p><b>Ridership in 2016: </b> " + feature.properties[attribute]/1000000 + " million</p>";
     
+    //adds the popup info to the circle marker layer
     layer.bindPopup(popupContent);
     
     return layer;
      
 }
 
-function getData(map){
 
-    $.ajax("data/railusa.geojson", {
-        dataType: "json",
-        success: function(response){
-            
-            var attributes = processData(response);
- 
-            createPropSymbols(response, map, attributes);
-            createSequenceControls(map, attributes);
-            createLegend(map, attributes);
-        }
-    });
-}
-
+//still trying to get this part to work correctly. The div shows up in the bottom left when I check the developer tools in Chrome, but I can't seem to get anything to show up on the map. 
 function createLegend(map, attributes){
     var LegendControl = L.Control.extend({
         options: {
@@ -208,6 +204,23 @@ function createLegend(map, attributes){
     })
     
     map.addControl(new LegendControl());
+}
+
+function getData(map){
+
+    $.ajax("data/railusa.geojson", {
+        dataType: "json",
+        success: function(response){
+            
+            var attributes = processData(response);
+ 
+            createPropSymbols(response, map, attributes);
+            createSequenceControls(map, attributes);
+            
+            //still trying to get the legend to work properly
+            createLegend(map, attributes);
+        }
+    });
 }
 
 $(document).ready(mapSetup);
