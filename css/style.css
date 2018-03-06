@@ -55,12 +55,20 @@ header {
 }
 
 .temporal-legend {
-    height: 100px;
-    width: 100px;
-    background-color: azure;
+    width: 150px;
+    height: 20px;
+    background-color: rgba(255,255,255,0.8);
+    padding: 10px;
+    text-align: center;
+    border: solid gray 1px;
 }
 
 p4 {
+    color:dimgray;
+    font-size: 16px;
+}
+
+p5{
     color:dimgray;
     font-size: 16px;
 }

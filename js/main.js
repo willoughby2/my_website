@@ -44,7 +44,7 @@ function updatePropSymbols(map, attribute){
     map.eachLayer(function(layer){
         if (layer.feature && layer.feature.properties[attribute]){
             
-            var props = layer. feature.properties;
+            var props = layer.feature.properties;
             
             var radius = calcPropRadius(props[attribute]);
             layer.setRadius(radius);
@@ -69,10 +69,14 @@ function updatePropSymbols(map, attribute){
 function updateLegend(map, attribute){
     map.eachLayer(function(layer){
         if (layer.feature && layer.feature.properties[attribute]){
+            
+            $(".legend-control-container").html("");
                         
             var year = attribute.split("_")[1];
-            console.log(year);
-            var legendContent = "<p><b>Ridership in " + year;
+
+            var legendContent = "<p5><b>Ridership in " + year + "</p5>";
+            
+            $(".legend-control-container").append(legendContent);
             
             return legendContent;
             }
@@ -115,6 +119,7 @@ function createSequenceControls(map, attributes){
         $('.range-slider').val(index);
         
         updatePropSymbols(map, attributes[index]);
+        updateLegend(map,attributes[index]);
         
     });
     
@@ -142,7 +147,7 @@ function processData(data){
             attributes.push(attribute);
         }
     }
-    console.log(attributes);
+
     return attributes;
 }
 
@@ -177,6 +182,7 @@ function pointToLayer(feature, latlng, attributes){
      
 }
 
+
 //creates the legend with Ridership year
 function createLegend(map, attributes){
     var LegendControl = L.Control.extend({
@@ -187,12 +193,10 @@ function createLegend(map, attributes){
         onAdd: function (map) {
             
             var container = L.DomUtil.create('div', 'legend-control-container');
-            
-            $(container).append('<div id="temporal-legend">')
 
             var legendContent = "<p4><b>Ridership in 2016</p4>"
             
-            $(container).append(legendContent);
+            $(container).append('<div id="temporal-legend">', legendContent)
             
             return container;
         }
