@@ -85,16 +85,18 @@ function updateLegend(map, attribute){
     
 }
 
+//creates the marker filter
 function createFilter (map, layer, feature) {
     $('.menu a').click(function() {
         $('.menu a.active').removeClass('active');
         
         var filter = $(this).data('filter');
         
-        console.log(filter);
-        
         if (filter = 'all') {
             $(this).addClass('active').siblings().removeClass('active');
+            
+            //trying to call the established attribute, but it comes back as undefined.
+            if (layer.properties.established) {}; 
             
         };
         
