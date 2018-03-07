@@ -135,6 +135,7 @@ function createSequenceControls(map, attributes){
     $('.range-slider').attr({
         max: 4,
         min: 0,
+        //I started the value at the end to step the slider back in time.
         value: 4,
         step: 1
     })
