@@ -93,10 +93,8 @@ function createFilter (map, layer, feature) {
         var filter = $(this).data('filter');
         
         if (filter = 'all') {
-            $(this).addClass('active').siblings().removeClass('active');
+            $(this).addClass('active').siblings().removeClass('active');            
             
-            //trying to call the established attribute, but it comes back as undefined.
-            if (layer.properties.established) {}; 
             
         };
         
@@ -104,10 +102,18 @@ function createFilter (map, layer, feature) {
             
              $(this).addClass('active').siblings().removeClass('active');
             
+            //trying to call the true/false attribute, but it comes back as undefined. I would love help on this part.
+            if (layer.properties.before_1950 = true) return true;
+            else return false;
+            
         };
         
         if (filter = 'after_1950') {
              $(this).addClass('active').siblings().removeClass('active');
+            
+            //trying to call the true/false attribute, but it comes back as undefined.
+            if (layer.properties.after_1950 = true) return true;
+            else return false;
             
         }
         
@@ -117,12 +123,13 @@ function createFilter (map, layer, feature) {
 
 
 function createSequenceControls(map, attributes){
-    
+    //creates the buttons for the slider
     $('#panel').append('<button class="skip" id="reverse">Reverse</button>');
     $('#panel').append('<button class="skip" id="forward">Skip</button>');
     $('#reverse').html('<img width="50%" src="img/backward.png">');
     $('#forward').html('<img width="50%" src="img/forward.png">');
     
+    //creates the slider
     $('#panel').append('<input class="range-slider" display="inline-block" type="range">');
     
     $('.range-slider').attr({
@@ -133,7 +140,7 @@ function createSequenceControls(map, attributes){
     })
     
     $('.skip').click(function(){
-        
+        //added to close popups before the slider updates the propsymbols layer
         map.closePopup();
         
         var index = $('.range-slider').val();
@@ -148,6 +155,7 @@ function createSequenceControls(map, attributes){
         
         $('.range-slider').val(index);
         
+        //slider will update symbols on the map and the legend
         updatePropSymbols(map, attributes[index]);
         updateLegend(map,attributes[index]);
         
@@ -157,8 +165,6 @@ function createSequenceControls(map, attributes){
         
         var index= $(this).val();
         
-        
-        //I have this ready to update both the propsymbols and the legend once I can get the legend to work properly
         updatePropSymbols(map, attributes[index]);
         updateLegend(map,attributes[index]);
         
