@@ -94,14 +94,18 @@ function createFilter (map, layer, feature) {
         console.log(filter);
         
         if (filter = 'all') {
+            $(this).addClass('active').siblings().removeClass('active');
             
         };
         
         if (filter = 'before_1950') {
             
+             $(this).addClass('active').siblings().removeClass('active');
+            
         };
         
         if (filter = 'after_1950') {
+             $(this).addClass('active').siblings().removeClass('active');
             
         }
         
