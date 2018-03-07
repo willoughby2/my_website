@@ -65,7 +65,7 @@ function updatePropSymbols(map, attribute){
     })
 }
 
-//One area I could not get to work. I am still trying
+//clears the initial legend and updates as the slider is initialized
 function updateLegend(map, attribute){
     map.eachLayer(function(layer){
         if (layer.feature && layer.feature.properties[attribute]){
@@ -82,6 +82,24 @@ function updateLegend(map, attribute){
             }
             
     })
+    
+}
+
+function createFilter (map) {
+    map.eachLayer(function(layer){
+        $('.menu a').on('click', function() {
+            var filter = $(this).data('filter');
+        
+            $(this).addClass('active').siblings().removeClass('active');
+        
+            layer.setFilter(function(f) {
+                return (filter === 'all') ? true : f.properties[filter] === true;
+            })
+        })
+        
+        return false;
+    })
+    
     
 }
 
@@ -215,9 +233,8 @@ function getData(map){
  
             createPropSymbols(response, map, attributes);
             createSequenceControls(map, attributes);
-            
-            //still trying to get the legend to work properly
             createLegend(map, attributes);
+            createFilter(map, response);
         }
     });
 }
