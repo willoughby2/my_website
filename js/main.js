@@ -85,21 +85,27 @@ function updateLegend(map, attribute){
     
 }
 
-function createFilter (map) {
-    map.eachLayer(function(layer){
-        $('.menu a').on('click', function() {
-            var filter = $(this).data('filter');
+function createFilter (map, layer, feature) {
+    $('.menu a').click(function() {
+        $('.menu a.active').removeClass('active');
         
-            $(this).addClass('active').siblings().removeClass('active');
+        var filter = $(this).data('filter');
         
-            layer.setFilter(function(f) {
-                return (filter === 'all') ? true : f.properties[filter] === true;
-            })
-        })
+        console.log(filter);
         
-        return false;
+        if (filter = 'all') {
+            
+        };
+        
+        if (filter = 'before_1950') {
+            
+        };
+        
+        if (filter = 'after_1950') {
+            
+        }
+        
     })
-    
     
 }
 
